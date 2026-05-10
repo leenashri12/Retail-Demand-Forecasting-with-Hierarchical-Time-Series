@@ -14,10 +14,11 @@ venv/
 env/
 
 # Data (raw files tracked by DVC, not Git)
-/data/**
-!/data/.gitkeep
-!/data/**/.gitignore
-!/data/**/*.dvc
+/data/*
+!/data/processed/
+/data/processed/*
+!/data/processed/*.dvc
+!/data/processed/.gitignore
 
 # MLflow
 mlruns/

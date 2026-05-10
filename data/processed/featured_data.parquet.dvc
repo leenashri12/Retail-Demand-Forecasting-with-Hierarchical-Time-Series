@@ -1,0 +1,5 @@
+outs:
+- md5: 9ca8bdb4829120dccf7f8e76f1fbfbde
+  size: 121047048
+  hash: md5
+  path: featured_data.parquet

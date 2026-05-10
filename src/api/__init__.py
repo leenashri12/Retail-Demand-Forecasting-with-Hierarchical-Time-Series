@@ -20,6 +20,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from src.data.loader import reduce_mem_usage
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -99,6 +101,7 @@ async def load_model_and_data():
     logger.info("Loading feature reference data ...")
     if FEATURED_PATH.exists():
         df = pd.read_parquet(FEATURED_PATH)
+        df = reduce_mem_usage(df, verbose=False)  # Match training dtypes
         # Keep only the last day per (store, item) as a feature template
         df["day_num"] = df["d"].astype(str).str.split("_").str[1].astype(int)
         feature_data = (

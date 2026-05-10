@@ -1,0 +1,5 @@
+outs:
+- md5: 1467386cd1c79efab40e71e535ace6f2
+  size: 6829888
+  hash: md5
+  path: lgbm_preds.npy

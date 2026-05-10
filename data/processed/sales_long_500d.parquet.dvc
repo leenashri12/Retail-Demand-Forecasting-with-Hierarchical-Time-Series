@@ -1,0 +1,5 @@
+outs:
+- md5: 33186f5b85ba28f4c0afa79e8817ed87
+  size: 77113977
+  hash: md5
+  path: sales_long_500d.parquet
