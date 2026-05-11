@@ -8,6 +8,7 @@ dist/
 build/
 *.egg
 
+
 # Virtual environments
 .venv/
 venv/
@@ -42,3 +43,6 @@ desktop.ini
 
 # Distribution
 *.whl
+
+# Internal project tracking
+AGENTS.md
