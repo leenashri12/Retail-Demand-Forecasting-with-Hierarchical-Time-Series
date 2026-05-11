@@ -342,8 +342,4 @@ This project uses the [M5 Forecasting — Accuracy](https://www.kaggle.com/compe
 
 Download and place in the `data/` directory before running the pipeline.
 
----
 
-## License
-
-This project is for educational and research purposes. The M5 dataset is provided by Walmart under the Kaggle competition terms.
