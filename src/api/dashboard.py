@@ -14,8 +14,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import streamlit as st
+# pyrefly: ignore [missing-import]
 import plotly.graph_objects as go
+# pyrefly: ignore [missing-import]
 import plotly.express as px
+# pyrefly: ignore [missing-import]
 from plotly.subplots import make_subplots
 
 # Project root

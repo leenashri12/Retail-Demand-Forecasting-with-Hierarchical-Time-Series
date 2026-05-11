@@ -10,6 +10,7 @@ Endpoints:
 
 import gc
 import logging
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -36,10 +37,25 @@ FEATURED_PATH = PROCESSED_DIR / "featured_data.parquet"
 # ---------------------------------------------------------------------------
 # App
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Lifespan (replaces deprecated @app.on_event)
+# ---------------------------------------------------------------------------
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    """Load model and data at startup, cleanup at shutdown."""
+    await _load_model_and_data()
+    yield
+    # Shutdown: free memory
+    global model, feature_data
+    del model, feature_data
+    gc.collect()
+
+
 app = FastAPI(
     title="M5 Hierarchical Forecast API",
     description="Retail demand forecasting with hierarchical reconciliation",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -83,11 +99,10 @@ class MetricsResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
-# Startup
+# Data loading
 # ---------------------------------------------------------------------------
-@app.on_event("startup")
-async def load_model_and_data():
-    """Load LightGBM model and prepare reference data at startup."""
+async def _load_model_and_data():
+    """Load LightGBM model and prepare reference data."""
     global model, feature_data, wrmsse_results, hierarchy_info
 
     logger.info("Loading LightGBM model from %s ...", MODEL_PATH)
@@ -118,7 +133,7 @@ async def load_model_and_data():
             "states": sorted(df["state_id"].unique().tolist()),
             "categories": sorted(df["cat_id"].unique().tolist()),
             "departments": sorted(df["dept_id"].unique().tolist()),
-            "n_series": int(df.groupby(["store_id", "item_id"]).ngroups),
+            "n_series": int(df.groupby(["store_id", "item_id"], observed=True).ngroups),
         }
 
         del df
